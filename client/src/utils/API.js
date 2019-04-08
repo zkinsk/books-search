@@ -16,9 +16,5 @@ export default {
   // Saves a book to the database
   saveBook: function(bookData) {
     return axios.post("/api/books", bookData);
-  },
-  searchBooks: function(searchBook){
-    let query = searchBook.auther? `${searchBook.title}/${searchBook.author}` : searchBook.title;
-    return axios.get(`/api/googlebooks/${query}`)
   }
 };

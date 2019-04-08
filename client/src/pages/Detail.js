@@ -8,18 +8,27 @@ class Detail extends Component {
   state = {
     book: {}
   };
-  // Add code to get the book with an _id equal to the id in the route param
-  // e.g. http://localhost:3000/books/:id
-  // The book id for this route can be accessed using this.props.match.params.id
+
+  componentDidMount() {
+    this.loadBookId();
+  }
+
+  loadBookId = () => {
+    API.getBook(this.props.match.params.id)
+    .then(book => {
+      this.setState({book: book.data});
+    })
+  }
 
   render() {
+    console.log("state: ", this.state)
     return (
       <Container fluid>
         <Row>
           <Col size="md-12">
             <Jumbotron>
               <h1>
-                {this.state.book.title} by {this.state.book.author}
+                {this.state.book.title} by: {this.state.book.author}
               </h1>
             </Jumbotron>
           </Col>
