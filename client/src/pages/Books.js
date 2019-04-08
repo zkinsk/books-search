@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import DeleteBtn from "../components/DeleteBtn";
+import SearchBtn from "../components/SearchBtn";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Link } from "react-router-dom";
@@ -12,18 +13,39 @@ class Books extends Component {
     books: [],
     title: "",
     author: "",
-    synopsis: ""
+    synopsis: "",
   };
 
   componentDidMount() {
     this.loadBooks();
+    // this.searchBooks();
   }
 
   loadBooks = () => {
     API.getBooks()
-      .then(res =>
+      .then(res => {
+        console.log(res);
         this.setState({ books: res.data, title: "", author: "", synopsis: "" })
-      )
+      })
+      .catch(err => console.log(err));
+  };
+
+  searchBooks = () => {
+    API.searchBooks()
+      .then(res => {
+        // this.setState({ books:res.data, title: "", author: "", synopsis: "" })
+        console.log(res.data.items)
+        let books = res.data.items.map(book => {
+          book = book.volumeInfo
+          return {
+            title: book.title,
+            author: book.authors[0],
+            synopsis: book.description
+          } 
+        })
+        this.setState({books: books});
+
+      })
       .catch(err => console.log(err));
   };
 
@@ -60,6 +82,7 @@ class Books extends Component {
           <Col size="md-6">
             <Jumbotron>
               <h1>What Books Should I Read?</h1>
+              <SearchBtn onClick={this.searchBooks}/>
             </Jumbotron>
             <form>
               <Input
