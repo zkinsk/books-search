@@ -5,7 +5,7 @@ import "./style.css";
 // That way we don't have to define them all individually
 function SearchBtn(props) {
   return (
-    <button className="search-btn btn btn-info" {...props} role="button" tabIndex="0">
+    <button className="search-btn btn btn-info" {...props} tabIndex="0">
       Search
     </button>
   );

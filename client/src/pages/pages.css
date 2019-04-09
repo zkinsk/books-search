@@ -1,0 +1,20 @@
+body {
+  position: relative;
+  min-height: 100vh
+}
+
+html {
+  min-height: 100vh;
+}
+.searchForm {
+  margin-top: 0.5rem;
+  position: relative;
+  border: black solid 2px;
+  padding: 0.5rem;
+}
+
+.results {
+  margin-top: 1.5rem;
+  border: black solid 2px;
+  padding: 0.5rem;
+}

@@ -19,8 +19,9 @@ export default {
   },
   searchBooks: function(searchData) {
     // let title = searchData.title;
-    let title = "Harry Potter";
-    let author = "";
+   const {title, author} = searchData
+  //  console.log(title)
+  //  console.log(author)
     return axios.get(`/api/googlebooks/${title}/${author}`);
   }
 };
