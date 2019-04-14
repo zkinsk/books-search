@@ -1,15 +1,13 @@
 import React, { Component } from "react";
-import DeleteBtn from "../components/DeleteBtn";
-import SearchBtn from "../components/SearchBtn";
+import SaveBtn from "../components/SaveBtn";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
-// import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, FormBtn } from "../components/Form";
 import "./pages.css";
 
-class Books extends Component {
+class Search extends Component {
   state = {
     books: [],
     title: "",
@@ -24,7 +22,7 @@ class Books extends Component {
   loadBooks = () => {
     API.getBooks()
       .then(res => {
-        console.log(res);
+        // console.log(res);
         this.setState({ books: res.data, title: "", author: "", synopsis: "" })
       })
       .catch(err => console.log(err));
@@ -33,22 +31,51 @@ class Books extends Component {
   searchBooks = (title, author) => {
     const searchData = {
       title: title,
-      author: author? author:"",
+      author: author? author : "",
     };
-    console.log(searchData)
+    // console.log(searchData)
     API.searchBooks(searchData)
       .then(res => {
         let books = res.data.items
-        this.setState({books: books});
+        let bookReduce = this.reduceBooks(books);
+        console.log("x: ", bookReduce);
+        // console.log("books; ", books);
+        this.setState({books: bookReduce});
       })
       .catch(err => console.log(err));
   };
 
-  deleteBook = id => {
-    API.deleteBook(id)
-      .then(res => this.loadBooks())
-      .catch(err => console.log(err));
+  reduceBooks = (books) => {
+    return books.map(book => {
+      let id = book.id
+      book = book.volumeInfo
+      let tnail = book.imageLinks ? book.imageLinks.thumbnail : "";
+        return  {
+          id: id,
+          title: book.title,
+          subtitle: book.subtitle,
+          thumbnail: tnail,
+          authors: [...book.authors],
+          infoLink: book.infoLink,
+          description: book.description
+        }
+      })
+  }
+
+
+  saveBook = (data) => {
+    API.getBook(data.id).
+    then((res, err) => {
+      if (!res.data.length){
+        API.saveBook(data)
+        .then (res => {
+          console.log(res);
+        })
+      }else{console.log("that one has already been saved")}
+    })
+    .catch (err => console.log(err));
   };
+
 
   handleInputChange = event => {
     event.preventDefault();
@@ -63,17 +90,23 @@ class Books extends Component {
     if (this.state.title && this.state.author) {
       // console.log(this.state.title, this.state.author)
       this.searchBooks(this.state.title, this.state.author)
+      this.resetForm();
     }else if(this.state.title){
       this.searchBooks(this.state.title);
+      this.resetForm();
     }
   };
+
+  resetForm =() => {
+    this.setState({author: "", title: ""})
+  }
 
   render() {
     return (
       <Container fluid>
         <Jumbotron>
           <h1>What Books Should I Read?</h1>
-          <SearchBtn onClick={this.searchBooks} />
+          {/* <SearchBtn onClick={this.searchBooks} /> */}
         </Jumbotron>
         <Row>
           <Col size="12">
@@ -112,13 +145,10 @@ class Books extends Component {
             >Results</h4>
               {this.state.books.length ? (
                 <List>
-                  {/* {console.log("state: ",this.state.books)} */}
+                  {console.log("state: ",this.state.books)}
                   {/* {console.log("rendering")} */}
                   {this.state.books.map( (book, i) => (
-                    <ListItem key={book.id} book={book.volumeInfo} i={i}>
-                      <DeleteBtn
-                        onClick={() => this.deleteBook(book._id)}
-                      />
+                    <ListItem key={book.id} book={book} i={i} saveBook = {this.saveBook} button={<SaveBtn book={book} saveBook={this.saveBook}/>}>
                     </ListItem>
                   ))}
                 </List>
@@ -133,4 +163,4 @@ class Books extends Component {
   }
 }
 
-export default Books;
+export default Search;

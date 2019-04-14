@@ -7,10 +7,10 @@ router.route("/")
   .post(booksController.create);
 
 // Matches with "/api/books/:id"
-router
-  .route("/:id")
-  .get(booksController.findById)
-  .put(booksController.update)
+router.route("/:id")
+  .get(booksController.findById);
+
+router.route("/:id")
   .delete(booksController.remove);
 
 module.exports = router;
