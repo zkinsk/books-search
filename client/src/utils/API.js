@@ -17,11 +17,10 @@ export default {
   saveBook: function(bookData) {
     return axios.post("/api/books", bookData);
   },
+
+  // google search api
   searchBooks: function(searchData) {
-    // let title = searchData.title;
    const {title, author} = searchData
-  //  console.log(title)
-  //  console.log(author)
     return axios.get(`/api/googlebooks/${title}/${author}`);
   }
 };

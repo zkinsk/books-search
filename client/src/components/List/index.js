@@ -12,9 +12,6 @@ export function List({ children }) {
   );
 }
 
-// export function ListItem({ children }) {
-//   return <li className="list-group-item">{children}</li>;
-// }
 function multiAuthor(author, i, arr){
  if (i === arr.length -1){
    return author
@@ -23,7 +20,7 @@ function multiAuthor(author, i, arr){
  }else{return `${author}, `}
 }
 
-export function ListItem({ book, i }) {
+export function ListItem({ book, i, saveBook, button }) {
   // console.log("book", book);
   return (
     <li className="list-group-item">
@@ -36,13 +33,13 @@ export function ListItem({ book, i }) {
         </div>
         <div className="col-12 col-sm-2 text-center text-sm-right">
          <a role="button" className="btn btn-info" href={book.infoLink} target="_blank" rel='noreferrer noopener'>View</a>
-         <button className="btn btn-success">Save</button>
+         {button}
         </div>
       </div>
       <div className="row">
-      {book.imageLinks?
+      {book.thumbnail?
         <div className="col-12 col-sm-auto text-center text-sm-left">
-           <img src={book.imageLinks.thumbnail} alt={book.title}/>
+           <img src={book.thumbnail} alt={book.title}/>
         </div>: ""}
         <div className="col-12 col-sm">
           <p> {book.description}</p>
