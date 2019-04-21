@@ -20,7 +20,8 @@ class Search extends Component {
   }
 
   loadBooks = () => {
-    API.getBooks()
+    API
+      .getBooks()
       .then(res => {
         // console.log(res);
         this.setState({ books: res.data, title: "", author: "", synopsis: "" })
@@ -37,6 +38,7 @@ class Search extends Component {
     API.searchBooks(searchData)
       .then(res => {
         let books = res.data.items
+        console.log(res.data.items);
         let bookReduce = this.reduceBooks(books);
         console.log("x: ", bookReduce);
         // console.log("books; ", books);
@@ -49,6 +51,7 @@ class Search extends Component {
     return books.map(book => {
       let id = book.id
       book = book.volumeInfo
+      if (!book.authors){book.authors = ["No Authors Listed"]};
       let tnail = book.imageLinks ? book.imageLinks.thumbnail : "";
         return  {
           id: id,
@@ -64,8 +67,8 @@ class Search extends Component {
 
 
   saveBook = (data) => {
-    API.getBook(data.id).
-    then((res, err) => {
+    API.getBook(data.id)
+    .then((res, err) => {
       if (!res.data.length){
         API.saveBook(data)
         .then (res => {
