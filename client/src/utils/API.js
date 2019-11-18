@@ -20,6 +20,7 @@ export default {
 
   // google search api
   searchBooks: function(searchData) {
+    console.log("searching for " + searchData)
    const {title, author} = searchData
     return axios.get(`/api/googlebooks/${title}/${author}`);
   }
